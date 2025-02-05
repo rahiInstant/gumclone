@@ -4,16 +4,18 @@ import {
   useNodesState,
   useEdgesState,
   addEdge,
-  MiniMap,
+  MiniMap,  ConnectionLineType,
   Controls,
+  ReactFlowProvider,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useCallback, useEffect, useState } from "react";
 import "@xyflow/react/dist/style.css";
 
 import ColorSelectorNode from "./ColorSelectorNode.jsx";
+import Flow from "./Flow.jsx";
 
-const initBgColor = "#c9f1dd";
+// const initBgColor = "#c9f1dd";
 
 const snapGrid = [20, 20];
 const nodeTypes = {
@@ -25,7 +27,7 @@ const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const Home = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [bgColor, setBgColor] = useState(initBgColor);
+  // const [bgColor, setBgColor] = useState(initBgColor);
 
   useEffect(() => {
     const onChange = (event) => {
@@ -37,7 +39,7 @@ const Home = () => {
 
           const color = event.target.value;
 
-          setBgColor(color);
+          // setBgColor(color);
 
           return {
             ...node,
@@ -57,11 +59,17 @@ const Home = () => {
         data: { label: "An input node" },
         position: { x: 0, y: 50 },
         sourcePosition: "right",
+        style:{
+          borderRadius: '15px',  
+          border: '2px solid #3498db',  
+          padding: '10px',  
+        }
+
       },
       {
         id: "2",
         type: "selectorNode",
-        data: { onChange: onChange, color: initBgColor },
+        data: { onChange: onChange },
         position: { x: 300, y: 50 },
       },
       {
@@ -71,13 +79,7 @@ const Home = () => {
         position: { x: 650, y: 25 },
         targetPosition: "left",
       },
-      {
-        id: "4",
-        type: "output",
-        data: { label: "Output B" },
-        position: { x: 650, y: 100 },
-        targetPosition: "left",
-      },
+
     ]);
 
     setEdges([
@@ -86,6 +88,9 @@ const Home = () => {
         source: "1",
         target: "2",
         animated: true,
+        style: { strokeWidth: 5,
+
+         },
       },
       {
         id: "e2a-3",
@@ -93,6 +98,7 @@ const Home = () => {
         target: "3",
         sourceHandle: "a",
         animated: true,
+        style: { strokeWidth: 5 },
       },
       {
         id: "e2b-4",
@@ -100,20 +106,21 @@ const Home = () => {
         target: "4",
         sourceHandle: "b",
         animated: true,
+        style: { strokeWidth: 5 },
       },
     ]);
   }, []);
 
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge({ ...params, animated: true }, eds)),
+    (params) => setEdges((eds) => addEdge({ ...params, animated: true,type: ConnectionLineType.SmoothStep }, eds)),
     []
   );
 
   return (
-    <section className="flex justify-center items-center px-8 xl:px-0">
-      <section className="flex justify-center items-center">
+    <section className="flex justify-center items-center px-8 xl:px-0 ">
+      <section className="flex justify-center items-center w-full">
         <div className="flex flex-col lg:flex-row max-w-7xl w-full py-24 lg:py-8">
-          <div className="flex flex-col  w-full justify-between">
+          <div className="flex flex-col w-full lg:w-1/2 flex-1 justify-between">
             {/* part 01 */}
             <div className="flex flex-col gap-2">
               <h1 className="text-[40px] lg:text-[64px] text-[#111] font-semibold leading-[115%]">
@@ -177,34 +184,14 @@ const Home = () => {
           </div>
           {/* react flow */}
 
-          <div>
-            <ReactFlow
-              nodes={nodes}
-              edges={edges}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              onConnect={onConnect}
-              style={{ background: bgColor }}
-              nodeTypes={nodeTypes}
-              snapToGrid={true}
-              snapGrid={snapGrid}
-              defaultViewport={defaultViewport}
-              fitView
-              attributionPosition="bottom-left"
-            >
-              <MiniMap
-                nodeStrokeColor={(n) => {
-                  if (n.type === "input") return "#0041d0";
-                  if (n.type === "selectorNode") return bgColor;
-                  if (n.type === "output") return "#ff0072";
-                }}
-                nodeColor={(n) => {
-                  if (n.type === "selectorNode") return bgColor;
-                  return "#fff";
-                }}
-              />
-              <Controls />
-            </ReactFlow>
+          <div className="hidden lg:flex w-full lg:w-1/2 justify-center items-center">
+            <div className="w-full h-full">
+              <div className="flex w-full h-[350px] md:h-[350px] lg:h-full max-w-md lg:max-w-5xl">
+                <div className="flex w-full h-full">
+                  <Flow/>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

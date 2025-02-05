@@ -2,7 +2,7 @@
 
 function Footer() {
   return (
-    <div>Footer</div>
+    <div className="h-[1000px]">Footer</div>
   )
 }
 

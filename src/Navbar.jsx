@@ -6,7 +6,7 @@ import { useState } from "react";
 const Navbar = () => {
   const [navState, setNavState] = useState(false);
   return (
-    <div className="fixed top-0 w-full z-50 bg-white/70 mt-0">
+    <div className="fixed top-0  w-full z-50 bg-white/70 mt-0">
       <div
         className="w-full backdrop-blur px-4 xl:px-0 pt-4 pb-2"
         style={{ WebkitBackdropFilter: "blur(10px)" }}

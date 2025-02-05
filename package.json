@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dagrejs/dagre": "^1.1.4",
     "@tailwindcss/vite": "^4.0.3",
     "@xyflow/react": "^12.4.2",
+    "d3": "^7.9.0",
     "localforage": "^1.10.0",
     "lucide": "^0.474.0",
     "lucide-react": "^0.474.0",
