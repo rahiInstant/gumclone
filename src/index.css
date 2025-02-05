@@ -4,5 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.no-transform {
+    transform: none;
+}
 
+.ok-transform {
+    transform: rotateX('angle');
+}
 
