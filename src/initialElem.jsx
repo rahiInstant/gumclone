@@ -11,7 +11,7 @@ export const initialNodes = [
       label: (
         <div className="flex gap-3 justify-between items-center p-.5">
           <div className="bg-white p-1 rounded-md shadow-md">
-            <img className="w-5 h-5" src="/src/assets/WebScrapingPreview.svg" alt="" />
+            <img className="w-5 h-5" src="/WebScrapingPreview.svg" alt="" />
           </div>
           <p className="font-medium text-[#AB5200] text-xs">Scrape Website</p>
         </div>
@@ -39,7 +39,7 @@ export const initialNodes = [
       label: (
         <div className="flex gap-3 justify-between items-center">
           <div className="bg-white p-1 rounded-md shadow-md">
-            <img className="w-5 h-5" src="/src/assets/OpenAIPreview.svg" alt="" />
+            <img className="w-5 h-5" src="/OpenAIPreview.svg" alt="" />
           </div>
           <p className="font-bold text-[#6552AD]">Ask AI</p>
         </div>
@@ -67,7 +67,7 @@ export const initialNodes = [
       label: (
         <div className="flex gap-3 justify-between items-center">
           <div className="bg-white p-1 rounded-md shadow-md">
-            <img className="w-5 h-5" src="/src/assets/gsheets.webp" alt="" />
+            <img className="w-5 h-5" src="/gsheets.webp" alt="" />
           </div>
           <p className="font-bold text-[#12855B]">Write to Google Sheet</p>
         </div>

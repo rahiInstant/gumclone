@@ -167,13 +167,13 @@ const Home = () => {
                 </h2>
                 <div className="flex flex-wrap items-center gap-x-8">
                   <div className="flex relative grayscale opacity-50 hover:opacity-100 transition-opacity">
-                    <img src="/src/assets/webflow_logo.webp" />
+                    <img src="/webflow_logo.webp" />
                   </div>
                   <div className="flex relative grayscale opacity-50 hover:opacity-100 transition-opacity">
-                    <img src="/src/assets/rippling.webp" />
+                    <img src="/rippling.webp" />
                   </div>
                   <div className="flex relative grayscale opacity-50 hover:opacity-100 transition-opacity mb-[3px]">
-                    <img src="/src/assets/siena_logo.webp" />
+                    <img src="/siena_logo.webp" />
                   </div>
                 </div>
                 <span className="text-sm text-gray-500">

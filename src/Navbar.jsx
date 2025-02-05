@@ -19,7 +19,7 @@ const Navbar = () => {
                 <a href="/home">
                   <div className="relative h-28 w-28 ">
                     <img
-                      src="/src/assets/gumloop_logo.svg"
+                      src="/gumloop_logo.svg"
                       height={154}
                       width={154}
                       alt="company_logo"
