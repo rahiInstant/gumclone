@@ -1,106 +1,99 @@
-import React, { useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import {
+  Controls,
   Background,
-  ReactFlow,
   addEdge,
-  ConnectionLineType,
-  Panel,
   useNodesState,
   useEdgesState,
+  Handle,
+  ReactFlow,
 } from "@xyflow/react";
-import dagre from "@dagrejs/dagre";
-
 import "@xyflow/react/dist/style.css";
 
-import { initialNodes, initialEdges } from "./initialElem.jsx";
-import Node from "./node.jsx";
-const nodeTypes = {
-  roundedNode: Node,
+const CustomNode = ({ data }) => {
+  const [name, setName] = useState(data?.name || "");
+  const [roll, setRoll] = useState(data?.roll || "");
+
+  return (
+    <div className="border p-2 rounded bg-white shadow">
+      <Handle
+        type="target"
+        position="top"
+        className="w-10 h-10 bg-blue-500 rounded-full"
+      />
+      <input
+        type="text"
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="border p-1 w-full"
+      />
+      <input
+        type="text"
+        placeholder="Roll"
+        value={roll}
+        onChange={(e) => setRoll(e.target.value)}
+        className="border p-1 w-full mt-1"
+      />
+      <Handle
+        type="source"
+        position="bottom"
+        className="w-10 h-10 bg-red-500 rounded-full"
+      />
+    </div>
+  );
 };
 
-const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
+const nodeTypes = { custom: CustomNode };
 
-const nodeWidth = 172;
-const nodeHeight = 36;
+const FlowComponent = () => {
+  const [nodes, setNodes, onNodesChange] = useNodesState([
+    {
+      id: "1",
+      type: "custom",
+      position: { x: 100, y: 100 },
+      data: { name: "", roll: "" },style: { strokeWidth: 2, stroke: "black" }
+    },
+  ]);
 
-const getLayoutedElements = (nodes, edges, direction = "TB") => {
-  const isHorizontal = direction === "LR";
-  dagreGraph.setGraph({ rankdir: direction });
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
-  });
-
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
-  });
-
-  dagre.layout(dagreGraph);
-
-  const newNodes = nodes.map((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
+  const addNode = useCallback(() => {
     const newNode = {
-      ...node,
-      targetPosition: isHorizontal ? "left" : "top",
-      sourcePosition: isHorizontal ? "right" : "bottom",
-      // We are shifting the dagre node position (anchor=center center) to the top left
-      // so it matches the React Flow node anchor point (top left).
-      position: {
-        x: nodeWithPosition.x - nodeWidth / 2,
-        y: nodeWithPosition.y - nodeHeight / 2,
-      },
+      id: `${nodes.length + 1}`,
+      type: "custom",
+      position: { x: Math.random() * 400, y: Math.random() * 400 },
+      data: { name: "", roll: "" },
     };
-
-    return newNode;
-  });
-
-  return { nodes: newNodes, edges };
-};
-
-const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-  initialNodes,
-  initialEdges
-);
-
-export const Flow = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+    setNodes((nds) => [...nds, newNode]);
+  }, [nodes, setNodes]);
 
   const onConnect = useCallback(
-    (params) =>
-      setEdges((eds) =>
-        addEdge(
-          { ...params, type: ConnectionLineType.SmoothStep, animated: true },
-          eds
-        )
-      ),
-    []
-  );
-  const onLayout = useCallback(
-    (direction) => {
-      const { nodes: layoutedNodes, edges: layoutedEdges } =
-        getLayoutedElements(nodes, edges, direction);
-
-      setNodes([...layoutedNodes]);
-      setEdges([...layoutedEdges]);
-    },
-    [nodes, edges]
+    (params) => setEdges((eds) => addEdge({...params,style: { strokeWidth: 3, stroke: "black" }}, eds)),
+    [setEdges]
   );
 
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      connectionLineType={ConnectionLineType.SmoothStep}
-      fitView
-      attributionPosition="false"
-      minZoom={2}
-      maxZoom={2}
-    ></ReactFlow>
+    <div className="w-full h-[800px]">
+      <button
+        onClick={addNode}
+        className="bg-slate-600 rounded-3xl px-4 text-white p-2  mb-2 absolute top-5 left-5 z-[9999]"
+      >
+        Add Node
+      </button>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+      >
+        <Controls />
+        <Background />
+      </ReactFlow>
+    </div>
   );
 };
 
-export default Flow;
+export default FlowComponent;
